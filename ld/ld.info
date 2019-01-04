@@ -64,7 +64,7 @@ Different formats may be linked together to produce any available kind
 of object file.  *Note BFD::, for more information.
 
    Aside from its flexibility, the GNU linker is more helpful than other
-linkers in providing diagnostic information.  Many linkers abandon
+linkers in providing diagnostic information特征信息.  Many linkers abandon
 execution immediately upon encountering an error; whenever possible,
 `ld' continues executing, allowing you to identify other errors (or, in
 some cases, to get an output file in spite of the error).
@@ -72,7 +72,7 @@ some cases, to get an output file in spite of the error).
 
 File: ld.info,  Node: Invocation,  Next: Scripts,  Prev: Overview,  Up: Top
 
-2 Invocation
+2 Invocation调用
 ************
 
 The GNU linker `ld' is meant to cover a broad range of situations, and

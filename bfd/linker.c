@@ -17,7 +17,7 @@
    You should have received a copy of the GNU General Public License
    along with this program; if not, write to the Free Software
    Foundation, Inc., 51 Franklin Street - Fifth Floor, Boston,
-   MA 02110-1301, USA.  */
+   MA 02110-1301, USA.....  */
 
 #include "sysdep.h"
 #include "bfd.h"
@@ -430,7 +430,7 @@ static bfd_boolean default_indirect_link_order
    a base hash table which the backend specific hash tables are built
    upon.  */
 
-/* Routine to create an entry in the link hash table.  */
+/* Routine to create an entry in the link hash table.调用objalloc_alloc分空间，并赋值为零。  */
 
 struct bfd_hash_entry *
 _bfd_link_hash_newfunc (struct bfd_hash_entry *entry,
@@ -455,14 +455,14 @@ _bfd_link_hash_newfunc (struct bfd_hash_entry *entry,
 
       /* Initialize the local fields.  */
       memset ((char *) &h->root + sizeof (h->root), 0,
-	      sizeof (*h) - sizeof (h->root));
+	      sizeof (*h) - sizeof (h->root));   //清零
     }
 
   return entry;
 }
 
 /* Initialize a link hash table.  The BFD argument is the one
-   responsible for creating this table.  */
+   responsible for creating this table. 赋值bfd_link_hash_table成员，初始化其成员table，最后在关闭ABFD时安排销毁这个散列表。 */
 
 bfd_boolean
 _bfd_link_hash_table_init
@@ -475,7 +475,7 @@ _bfd_link_hash_table_init
 {
   bfd_boolean ret;
 
-  BFD_ASSERT (!abfd->is_linker_output && !abfd->link.hash);
+  BFD_ASSERT (!abfd->is_linker_output && !abfd->link.hash); //宏定义
   table->undefs = NULL;
   table->undefs_tail = NULL;
   table->type = bfd_link_generic_hash_table;
@@ -493,7 +493,7 @@ _bfd_link_hash_table_init
 
 /* Look up a symbol in a link hash table.  If follow is TRUE, we
    follow bfd_link_hash_indirect and bfd_link_hash_warning links to
-   the real symbol.  */
+   the real symbol.  调用bfd_hash_lookup，在哈希表中查找符号 */
 
 struct bfd_link_hash_entry *
 bfd_link_hash_lookup (struct bfd_link_hash_table *table,

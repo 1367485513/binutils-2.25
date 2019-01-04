@@ -396,7 +396,8 @@ bfd_hash_table_init_n (struct bfd_hash_table *table,
       bfd_set_error (bfd_error_no_memory);
       return FALSE;
     }
-  memset ((void *) table->table, 0, alloc); //将s所指向的某一块内存中的每个字节的内容全部设置为ch指定的ASCII值， 块的大小由第三个参数指定，这个函数通常为新申请的内存做初始化工作， 其返回值为指向S的指针。
+  memset ((void *) table->table, 0, alloc); 
+  //将s所指向的某一块内存中的每个字节的内容全部设置为ch指定的ASCII值，块的大小由第三个参数指定，这个函数通常为新申请的内存做初始化工作， 其返回值为指向S的指针。
   table->size = size;
   table->entsize = entsize;
   table->count = 0;
