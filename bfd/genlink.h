@@ -52,7 +52,7 @@ struct generic_link_hash_entry
 
 struct generic_link_hash_table
 {
-  struct bfd_link_hash_table root;
+  struct bfd_link_hash_table root;  //分的内存按定义的struct走
 };
 
 /* Look up an entry in a generic link hash table.  */

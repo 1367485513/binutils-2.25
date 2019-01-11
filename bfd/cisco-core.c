@@ -1,4 +1,4 @@
-/* BFD back-end for CISCO crash dumps.
+/* BFD back-end for CISCO crash dumps.强大的网络模拟工具
    Copyright (C) 1994-2014 Free Software Foundation, Inc.
 
    This file is part of BFD, the Binary File Descriptor library.

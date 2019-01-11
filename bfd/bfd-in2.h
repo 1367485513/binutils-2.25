@@ -6235,7 +6235,7 @@ bfd_boolean bfd_is_target_special_symbol (bfd *abfd, asymbol *sym);
 #define bfd_is_target_special_symbol(abfd, sym) \
   BFD_SEND (abfd, _bfd_is_target_special_symbol, (abfd, sym))
 
-#define bfd_canonicalize_symtab(abfd, location) \
+#define bfd_canonicalize_symtab(abfd, location) \  //#define BFD_SEND(bfd, message, arglist) ((*((bfd)->xvec->message)) arglist)
   BFD_SEND (abfd, _bfd_canonicalize_symtab, (abfd, location))
 
 bfd_boolean bfd_set_symtab

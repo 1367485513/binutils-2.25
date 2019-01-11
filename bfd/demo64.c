@@ -1,4 +1,4 @@
-/* BFD backend for demonstration 64-bit a.out binaries.
+/* BFD backend for demonstration示范 64-bit a.out binaries.
    Copyright (C) 1990-2014 Free Software Foundation, Inc.
    Written by Cygnus Support.
 
