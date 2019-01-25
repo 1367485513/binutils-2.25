@@ -195,7 +195,7 @@ bfd_fopen (const char *filename, const char *target, const char *mode, int fd)
   bfd *nbfd;
   const bfd_target *target_vec;
 
-  nbfd = _bfd_new_bfd ();//给nbfdmalloc，在nbfd中只定义了memory与arch_info，还有id
+  nbfd = _bfd_new_bfd ();//给nbfd分配malloc，在nbfd中只定义了memory与arch_info，还有id
   if (nbfd == NULL)
     {
       if (fd != -1)
@@ -246,7 +246,7 @@ bfd_fopen (const char *filename, const char *target, const char *mode, int fd)
       _bfd_delete_bfd (nbfd);
       return NULL;
     }
-  nbfd->opened_once = TRUE;
+  nbfd->opened_once = TRUE; //... and here: (``once'' means at least once). 
 
   /* If we opened the file by name, mark it cacheable; we can close it
      and reopen it later.  However, if a file descriptor was provided,

@@ -23,11 +23,9 @@
 SECTION
 	Relocations
 
-	BFD maintains relocations in much the same way it maintains
-	symbols: they are left alone until required, then read in
-	en-masse and translated into an internal form.  A common
-	routine <<bfd_perform_relocation>> acts upon the
-	canonical form to do the fixup.
+	BFD maintains relocations in much the same way it maintains symbols: 
+  they are left alone until required, then read in en-masse and translated into an internal form. 
+  A common routine <<bfd_perform_relocation>> acts upon the canonical form to do the fixup.
 
 	Relocations are maintained on a per section basis,
 	while symbols are maintained on a per BFD basis.
@@ -244,8 +242,7 @@ DESCRIPTION
 SUBSUBSECTION
 	<<enum complain_overflow>>
 
-	Indicates what sort of overflow checking should be done when
-	performing a relocation.
+	Indicates what sort of overflow checking should be done when performing a relocation.
 
 CODE_FRAGMENT
 .
@@ -427,7 +424,7 @@ DESCRIPTION
  */
 
 unsigned int
-bfd_get_reloc_size (reloc_howto_type *howto)
+bfd_get_reloc_size (reloc_howto_type *howto)//typedef const struct reloc_howto_struct reloc_howto_type;
 {
   switch (howto->size)
     {
@@ -459,7 +456,7 @@ DESCRIPTION
 .
 */
 
-/* N_ONES produces N one bits, without overflowing machine arithmetic.  */
+/* N_ONES produces N one bits, without overflowing machine arithmetic算法.  */
 #define N_ONES(n) (((((bfd_vma) 1 << ((n) - 1)) - 1) << 1) | 1)
 
 /*
@@ -480,7 +477,7 @@ DESCRIPTION
 	@var{rightshift} bits, on a machine with addresses containing
 	@var{addrsize} significant bits.  The result is either of
 	@code{bfd_reloc_ok} or @code{bfd_reloc_overflow}.
-
+在代码里有算法，目前没搞懂。
 */
 
 bfd_reloc_status_type
@@ -497,7 +494,7 @@ bfd_check_overflow (enum complain_overflow how,
      we'll be permissive: extra bits in the field mask will
      automatically extend the address mask for purposes of the
      overflow check.  */
-  fieldmask = N_ONES (bitsize);
+  fieldmask = N_ONES (bitsize);  //上面宏定义
   signmask = ~fieldmask;
   addrmask = N_ONES (addrsize) | (fieldmask << rightshift);
   a = (relocation & addrmask) >> rightshift;
@@ -565,7 +562,12 @@ DESCRIPTION
 	types with addends were invented to solve just this problem.
 	The @var{error_message} argument is set to an error message if
 	this return @code{bfd_reloc_dangerous}.
-
+如果为此函数提供了@var {output_bfd}，则生成的图像将可重定位; 更改后，重定位将复制到输出文件，
+以反映世界的新状态。 有两种方法可以反映输出文件中部分链接的结果：通过修改输出数据，以及修改重定位记录。
+ 某些本机格式（例如，基本a.out和基本coff）无法在重定位类型中指定加数，因此加数必须包含在输出数据中。
+这没什么大不了的，因为在这些格式中，输出数据槽对于加数总是足够大。
+ 发明了带有加数的复杂重定位类型来解决这个问题。
+如果返回@code {bfd_reloc_dangerous}，@ var {error_message}参数将设置为错误消息。
 */
 
 bfd_reloc_status_type
@@ -577,16 +579,16 @@ bfd_perform_relocation (bfd *abfd,
 			char **error_message)
 {
   bfd_vma relocation;
-  bfd_reloc_status_type flag = bfd_reloc_ok;
-  bfd_size_type octets = reloc_entry->address * bfd_octets_per_byte (abfd);
+  bfd_reloc_status_type flag = bfd_reloc_ok;  //枚举变量
+  bfd_size_type octets = reloc_entry->address * bfd_octets_per_byte (abfd); //*为乘号
   bfd_vma output_base = 0;
   reloc_howto_type *howto = reloc_entry->howto;
   asection *reloc_target_output_section;
   asymbol *symbol;
 
   symbol = *(reloc_entry->sym_ptr_ptr);
-  if (bfd_is_abs_section (symbol->section)
-      && output_bfd != NULL)
+  if (bfd_is_abs_section (symbol->section) //sec == &_bfd_std_section[2]
+      && output_bfd != NULL) //不为空就应该有信息。产生了重定位输出
     {
       reloc_entry->address += input_section->output_offset;
       return bfd_reloc_ok;
@@ -595,7 +597,7 @@ bfd_perform_relocation (bfd *abfd,
   /* If we are not producing relocatable output, return an error if
      the symbol is not defined.  An undefined weak symbol is
      considered to have a value of zero (SVR4 ABI, p. 4-27).  */
-  if (bfd_is_und_section (symbol->section)
+  if (bfd_is_und_section (symbol->section) //(sec) == bfd_und_section_ptr
       && (symbol->flags & BSF_WEAK) == 0
       && output_bfd == NULL)
     flag = bfd_reloc_undefined;
@@ -608,13 +610,13 @@ bfd_perform_relocation (bfd *abfd,
       bfd_reloc_status_type cont;
       cont = howto->special_function (abfd, reloc_entry, symbol, data,
 				      input_section, output_bfd,
-				      error_message);
+				      error_message);  //这个特殊函数指向了哪个函数
       if (cont != bfd_reloc_continue)
 	return cont;
     }
 
   /* Is the address of the relocation really within the section?  */
-  if (reloc_entry->address > bfd_get_section_limit (abfd, input_section))
+  if (reloc_entry->address > bfd_get_section_limit (abfd, input_section))//Find the address one past the end of SEC.
     return bfd_reloc_outofrange;
 
   /* Work out which section the relocation is targeted at and the
@@ -643,7 +645,7 @@ bfd_perform_relocation (bfd *abfd,
   /* Here the variable relocation holds the final address of the
      symbol we are relocating against, plus any addend.  */
 
-  if (howto->pc_relative)
+  if (howto->pc_relative) //reloc_howto_type *howto 
     {
       /* This is a PC relative relocation.  We want to set RELOCATION
 	 to the distance between the address of the symbol and the
@@ -680,7 +682,7 @@ bfd_perform_relocation (bfd *abfd,
 	relocation -= reloc_entry->address;
     }
 
-  if (output_bfd != NULL)
+  if (output_bfd != NULL) //形参，类型bfd；
     {
       if (! howto->partial_inplace)
 	{
@@ -1326,7 +1328,7 @@ bfd_reloc_status_type
 _bfd_final_link_relocate (reloc_howto_type *howto,
 			  bfd *input_bfd,
 			  asection *input_section,
-			  bfd_byte *contents,
+			  bfd_byte *contents,  //无符号字符
 			  bfd_vma address,
 			  bfd_vma value,
 			  bfd_vma addend)
@@ -7355,7 +7357,11 @@ DESCRIPTION
 reloc_howto_type *
 bfd_reloc_type_lookup (bfd *abfd, bfd_reloc_code_real_type code)
 {
-  return BFD_SEND (abfd, reloc_type_lookup, (abfd, code));
+  return BFD_SEND (abfd, reloc_type_lookup, (abfd, code)); //函数指针
+  //reloc_howto_type *
+   //           (*reloc_type_lookup) (bfd *, bfd_reloc_code_real_type);
+  // #define BFD_SEND(bfd, message, arglist) \
+    ((*((bfd)->xvec->message)) arglist)
 }
 
 reloc_howto_type *
@@ -7486,7 +7492,7 @@ SYNOPSIS
 DESCRIPTION
 	Provides default handling for section flags lookup
 	-- i.e., does nothing.
-	Returns FALSE if the section should be omitted, otherwise TRUE.
+	Returns FALSE if the section should be omitted遗漏, otherwise TRUE.
 */
 
 bfd_boolean
@@ -7561,7 +7567,7 @@ bfd_generic_get_relocated_section_contents (bfd *abfd,
 
   /* Read in the section.  */
   if (!bfd_get_full_section_contents (input_bfd, input_section, &data))
-    return NULL;
+    return NULL; //函数都是操作指针，操作语句执行结束成功与否返回true或者false
 
   if (reloc_size == 0)
     return data;

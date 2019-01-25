@@ -40,7 +40,7 @@
 
 #if !defined (HAVE_DLFCN_H) && defined (HAVE_WINDOWS_H)
 
-#define RTLD_NOW 0      /* Dummy value.  */
+#define RTLD_NOW 0      /* Dummy value.虚拟价值  */
 
 static void *
 dlopen (const char *file, int mode ATTRIBUTE_UNUSED)
